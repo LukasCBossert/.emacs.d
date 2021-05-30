@@ -47,10 +47,11 @@
     ("N" . dashboard-next-section)
     ("F" . dashboard-previous-section)))
   :custom
-  (dashboard-banner-logo-title "Close the world. Open the nExt.")
-  (dashboard-startup-banner (expand-file-name "images/KEC_Dark_BK_Small.png" user-emacs-directory))
+  (dashboard-banner-logo-title "automate & optimize")
+  (dashboard-startup-banner (expand-file-name "images/lukas-avatar.png" user-emacs-directory))
   (dashboard-items '((recents  . 7)
                      (bookmarks . 7)
+                     (projects . 7)
                      (agenda . 5)))
   (initial-buffer-choice (lambda () (get-buffer dashboard-buffer-name)))
   (dashboard-set-heading-icons t)
@@ -58,13 +59,13 @@
   (dashboard-navigator-buttons
    (if (featurep 'all-the-icons)
        `(((,(all-the-icons-octicon "mark-github" :height 1.1 :v-adjust -0.05)
-           "M-EMACS" "Browse M-EMACS Homepage"
-           (lambda (&rest _) (browse-url "https://github.com/MatthewZMD/.emacs.d")))
+           "lukascbossert" "Browse GitHub Homepage"
+           (lambda (&rest _) (browse-url "https://github.com/lukascbossert/")))
           (,(all-the-icons-fileicon "elisp" :height 1.0 :v-adjust -0.1)
            "Configuration" "" (lambda (&rest _) (edit-configs)))
           (,(all-the-icons-faicon "cogs" :height 1.0 :v-adjust -0.1)
            "Update" "" (lambda (&rest _) (auto-package-update-now)))))
-     `((("" "M-EMACS" "Browse M-EMACS Homepage"
+     `((("" "lukascbossert" "Browse GitHub Homepage"
          (lambda (&rest _) (browse-url "https://github.com/MatthewZMD/.emacs.d")))
         ("" "Configuration" "" (lambda (&rest _) (edit-configs)))
         ("" "Update" "" (lambda (&rest _) (auto-package-update-now)))))))
@@ -83,7 +84,8 @@
     (dashboard-insert-startupify-lists)
     (switch-to-buffer dashboard-buffer-name)
     (goto-char (point-min))
-    (delete-other-windows)))
+    ;;(delete-other-windows)
+    ))
 ;; -DashboardPac
 
 ;; PBLPac

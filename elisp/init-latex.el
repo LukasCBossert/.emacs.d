@@ -66,6 +66,18 @@
     (add-hook LaTeX-mode-hook #'display-line-numbers-mode)))
 ;; -AUCTeXPac
 
+;;    Setting Biblatex as default
+(setq bibtex-dialect 'biblatex)
+
+;; Run LaTeX-Compiler with LuaLaTeX
+(eval-after-load "latex"
+  '(progn
+     (push '("Latexmk" "latexmk -lualatex  %s" TeX-run-TeX nil t
+             :help "Run Latexmk on file")
+           TeX-command-list)
+     TeX-expand-list))
+
+
 (provide 'init-latex)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-latex.el ends here

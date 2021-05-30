@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: Long-implies
-# key: Limpl
+# name: long-implies
+# key: limpl
 # --
-\Longrightarrow
+\longrightarrow

@@ -305,7 +305,7 @@
    #+INCLUDE: "~/.emacs.d/elisp/init-search.el" src emacs-lisp :range-begin "IvyPac" :range-end "-IvyPac" :lines "42-71"
 ** Color Ripgrep
    [[https://github.com/manateelazycat/color-rg][Color rg]], a search and refactoring tool based on /ripgrep/ that is used to search text.
-
+3
    *Prerequisite*: Ensure [[https://github.com/BurntSushi/ripgrep#installation][ripgrep]] and ensure =rg= is in =PATH=.
    #+INCLUDE: "~/.emacs.d/elisp/init-search.el" src emacs-lisp :range-begin "ColorRGPac" :range-end "-ColorRGPac" :lines "74-78"
 ** Find File In Project
@@ -404,10 +404,10 @@
     [[https://github.com/rakanalh/emacs-dashboard][Dashboard]], an extensible Emacs startup screen.
 
     Use either =KEC_Dark_BK.png= or =KEC_Light_BK.png= depends on the backgrond theme.
-    #+INCLUDE: "~/.emacs.d/elisp/init-dashboard.el" src emacs-lisp :range-begin "DashboardPac" :range-end "-DashboardPac" :lines "39-87"
+    #+INCLUDE: "~/.emacs.d/elisp/init-dashboard.el" src emacs-lisp :range-begin "DashboardPac" :range-end "-DashboardPac" :lines "39-89"
 *** Page Break Lines
     [[https://github.com/purcell/page-break-lines][Page-break-lines]], a feature that displays ugly form feed characters as tidy horizontal rules.
-    #+INCLUDE: "~/.emacs.d/elisp/init-dashboard.el" src emacs-lisp :range-begin "PBLPac" :range-end "-PBLPac" :lines "90-93"
+    #+INCLUDE: "~/.emacs.d/elisp/init-dashboard.el" src emacs-lisp :range-begin "PBLPac" :range-end "-PBLPac" :lines "92-95"
 ** Fonts and Icons
    *Prerequisite*: Install all the available fonts and icons from =fonts/=.
 *** Fonts
@@ -435,7 +435,7 @@
     #+INCLUDE: "~/.emacs.d/elisp/init-ui-config.el" src emacs-lisp :range-begin "DisLineNum" :range-end "-DisLineNum" :lines "73-80"
 *** Modeline Time and Battery
     Display time and battery information in modeline.
-    #+INCLUDE: "~/.emacs.d/elisp/init-ui-config.el" src emacs-lisp :range-begin "DisTimeBat" :range-end "-DisTimeBat" :lines "83-85"
+    #+INCLUDE: "~/.emacs.d/eli/init-ui-config.el" src emacs-lisp :range-begin "DisTimeBat" :range-end "-DisTimeBat" :lines "83-85"
 * General Programming
 ** Magit
    [[https://magit.vc/][Magit]], an interface to the version control system Git.

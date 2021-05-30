@@ -61,6 +61,30 @@
 (push '(vertical-scroll-bars) default-frame-alist)
 ;; -DisableUnnecessaryInterface
 
+
+;; Start layout
+;; (defun startup-layout ()
+;;   (interactive)
+;;   (delete-other-windows)
+;;   (eshell)
+
+;;   (split-window-horizontally)
+;;   (dashboard-refresh-buffer)
+
+
+;;   (next-multiframe-window)
+;;   (split-window-vertically)
+;;   (ibuffer-jump)
+
+;;   (previous-multiframe-window)
+;;   )
+;; (startup-layout)
+;; -start layout
+
+;; fullscreen when start
+(add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
+
+
 (provide 'early-init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; early-init.el ends here

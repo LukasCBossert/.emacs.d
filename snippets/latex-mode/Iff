@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: Iff
-# key: Iff
+# name: iff<->
+# key: iff
 # --
-\Leftrightarrow
+\leftrightarrow
