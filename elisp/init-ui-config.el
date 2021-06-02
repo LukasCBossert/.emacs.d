@@ -84,6 +84,29 @@
 (display-battery-mode 1)
 ;; -DisTimeBat
 
+;; Line Wrap
+(global-visual-line-mode 1)
+;; -Line Wrap
+
+;; StartupLayout
+(defun startup-layout ()
+  (interactive)
+  (delete-other-windows)
+  (aweshell-new)
+
+  (split-window-horizontally)
+ ;; (dashboard-refresh-buffer )
+
+
+  (next-multiframe-window)
+  (enlarge-window ( - 10 (window-body-height)))
+  (split-window-vertically)
+  (ibuffer-jump)
+
+  (previous-multiframe-window)
+  )
+(startup-layout)
+;; -StartupLayout
 (provide 'init-ui-config)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; init-ui-config.el ends here
