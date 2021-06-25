@@ -36,7 +36,7 @@
 ;;; Code:
 
 ;; UserInfo
-(setq user-full-name "Dr. Lukas C. Bossert")
+(setq user-full-name "Lukas C. Bossert")
 (setq user-mail-address "mail@lukascbossert.de")
 ;; -UserInfo
 

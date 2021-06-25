@@ -55,8 +55,8 @@
    (:map mu4e-view-mode-map
          ("e" . mu4e-view-save-attachment)))
   :custom
-  (mu4e-maildir (expand-file-name "~/Maildir"))
-  (mu4e-get-mail-command "mbsync -c ~/.emacs.d/mu4e/.mbsyncrc -a")
+  (mu4e-maildir (expand-file-name "~/.maildir/"))
+  (mu4e-get-mail-command "mbsync -c ~/.mbsyncrc -a")
   (mu4e-view-prefer-html t)
   (mu4e-update-interval 180)
   (mu4e-headers-auto-update t)
@@ -70,7 +70,7 @@
   (mu4e-confirm-quit nil)
   (mu4e-use-fancy-chars t)
   (mu4e-view-use-gnus t)
-  (gnus-icalendar-org-capture-file "~/org/agenda/meetings.org") ; Prerequisite: set it to meetings org fie
+  (gnus-icalendar-org-capture-file "~/github/furry-octo-spoon/agenda/meetings.org") ; Prerequisite: set it to meetings org fie
   (gnus-icalendar-org-capture-headline '("Meetings")) ; Make sure to create Calendar heading first
   :hook
   ((mu4e-view-mode . visual-line-mode)
@@ -98,40 +98,99 @@
   (setq mail-user-agent (mu4e-user-agent))
   (add-to-list 'mu4e-view-actions
                '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-  (setq mu4e-contexts
-        (list
-         (make-mu4e-context
-          :name "gmail"
-          :enter-func (lambda () (mu4e-message "Entering context gmail"))
-          :leave-func (lambda () (mu4e-message "Leaving context gmail"))
-          :match-func
-          (lambda (msg)
-            (when msg
-              (string-match "gmail" (mu4e-message-field msg :maildir))))
-          :vars '((mu4e-sent-folder . "/gmail/Sent Mail")
-                  (mu4e-drafts-folder . "/gmail/Drafts")
-                  (mu4e-trash-folder . "/gmail/Trash")
-                  (mu4e-sent-messages-behavior . sent)
-                  (mu4e-compose-signature . user-full-name)
-                  (user-mail-address . user-mail-address) ; Prerequisite: Set this to your email
-                  (mu4e-compose-format-flowed . t)
-                  (smtpmail-queue-dir . "~/Maildir/gmail/queue/cur")
-                  (message-send-mail-function . smtpmail-send-it)
-                  (smtpmail-smtp-user . "matthewzmd") ; Set to your username
-                  (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
-                  (smtpmail-auth-credentials . (expand-file-name "~/.authinfo.gpg"))
-                  (smtpmail-default-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-server . "smtp.gmail.com")
-                  (smtpmail-smtp-service . 587)
-                  (smtpmail-debug-info . t)
-                  (smtpmail-debug-verbose . t)
-                  (mu4e-maildir-shortcuts . ( ("/gmail/INBOX"            . ?i)
-                                              ("/gmail/Sent Mail" . ?s)
-                                              ("/gmail/Trash"       . ?t)
-                                              ("/gmail/All Mail"  . ?a)
-                                              ("/gmail/Starred"   . ?r)
-                                              ("/gmail/Drafts"    . ?d))))))))
+  (setq   mu4e-maildir-shortcuts
+        '(("/lukascbossert/INBOX" . ?i)
+          ("/lukascbossert/Sent Items" . ?s)
+          ("/lukascbossert/Spam" . ?S)
+          ("/lukascbossert/Trash" . ?t)
+          ("/lukascbossert/Archive" . ?a)
+          ("/lukascbossert/Drafts" . ?d)
+          ("/lukascbossert/Archive" . ?a)
+          ))
+  )
 ;; -Mu4ePac
+
+(with-eval-after-load 'mu4e
+  (add-to-list 'mu4e-bookmarks
+             (mu4e-bookmark
+              :name "Inbox - lukascbossert"
+              :query "maildir:/lukascbossert/INBOX"
+              :key ?e)))
+
+;; gpg encryptiom & decryption:
+;; this can be left alone
+(require 'epa-file)
+(epa-file-enable)
+(setq epg-pinentry-mode 'loopback)
+(auth-source-forget-all-cached)
+
+;; don't keep message compose buffers around after sending:
+(setq message-kill-buffer-on-exit t)
+
+;; send function:
+(setq send-mail-function 'sendmail-send-it
+      message-send-mail-function 'sendmail-send-it)
+
+;; send program:
+;; this is exeranal. remember we installed it before.
+(setq sendmail-program (executable-find "msmtp"))
+
+;; select the right sender email from the context.
+(setq message-sendmail-envelope-from 'header)
+
+;; chose from account before sending
+;; this is a custom function that works for me.
+;; well I stole it somewhere long ago.
+;; I suggest using it to make matters easy
+;; of course adjust the email adresses and account descriptions
+(defun timu/set-msmtp-account ()
+  (if (message-mail-p)
+      (save-excursion
+        (let*
+            ((from (save-restriction
+                     (message-narrow-to-headers)
+                     (message-fetch-field "from")))
+             (account
+              (cond
+            ;;  ((string-match "dummy@icloud.com" from) "icloud")
+            ;;   ((string-match "dummy@gmail.com" from) "gmail")
+               ((string-match "mail@lukascbossert.de" from) "lukascbossert")
+               )))
+          (setq message-sendmail-extra-arguments (list '"-a" account))))))
+
+(add-hook 'message-send-mail-hook 'timu/set-msmtp-account)
+
+;; mu4e cc & bcc
+;; this is custom as well
+(add-hook 'mu4e-compose-mode-hook
+          (defun timu/add-cc-and-bcc ()
+            "My Function to automatically add Cc & Bcc: headers.
+    This is in the mu4e compose mode."
+            (save-excursion (message-add-header "Cc:\n"))
+            (save-excursion (message-add-header "Bcc:\n"))))
+
+;; mu4e address completion
+(add-hook 'mu4e-compose-mode-hook 'company-mode)
+
+
+;; store link to message if in header view, not to header query:
+(setq mu4e-org-link-query-in-headers-mode nil)
+;; don't have to confirm when quitting:
+(setq mu4e-confirm-quit nil)
+;; number of visible headers in horizontal split view:
+(setq mu4e-headers-visible-lines 20)
+;; don't show threading by default:
+(setq mu4e-headers-show-threads nil)
+;; hide annoying "mu4e Retrieving mail..." msg in mini buffer:
+(setq mu4e-hide-index-messages t)
+;; customize the reply-quote-string:
+(setq message-citation-line-format "%N @ %Y-%m-%d %H:%M :\n")
+;; M-x find-function RET message-citation-line-format for docs:
+(setq message-citation-line-function 'message-insert-formatted-citation-line)
+;; by default do not show related emails:
+(setq mu4e-headers-include-related nil)
+;; by default do not show threads:
+(setq mu4e-headers-show-threads nil)
 
 (provide 'init-mu4e)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

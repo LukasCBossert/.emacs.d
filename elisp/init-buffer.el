@@ -36,6 +36,7 @@
 ;;; Code:
 
 ;; IBufferPac
+
 (use-package ibuffer
   :ensure nil
   :bind ("C-x C-b" . ibuffer)
@@ -56,6 +57,14 @@
      (mark " "
            (name 16 -1)
            " " filename))))
+
+;; ;; Group ibuffer's list by project root
+(use-package ibuffer-projectile
+  :functions all-the-icons-octicon ibuffer-do-sort-by-alphabetic
+  :hook ((ibuffer . (lambda ()
+                      (ibuffer-projectile-set-filter-groups)
+                      (unless (eq ibuffer-sorting-mode 'alphabetic)
+                        (ibuffer-do-sort-by-alphabetic))))))
 ;; -IBufferPac
 
 (provide 'init-buffer)

@@ -101,7 +101,8 @@
   (next-multiframe-window)
   (enlarge-window ( - 10 (window-body-height)))
   (split-window-vertically)
-  (ibuffer-jump)
+  ;; (ibuffer-jump)
+  (find-file "~/github/furry-octo-spoon/agenda/lukascbossert.org")
 
   (previous-multiframe-window)
   )

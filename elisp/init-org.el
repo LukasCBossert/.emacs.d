@@ -55,7 +55,7 @@
   (org-latex-listings t)
   (org-deadline-warning-days 7)
   (org-todo-keywords
-   '((sequence "TODO" "IN-PROGRESS" "REVIEW" "|" "DONE" "CANCELED")))
+   '((sequence "TODO" "IN-PROGRESS" "REVIEW" "VOID" "|" "DONE" "CANCELED")))
   (org-agenda-window-setup 'other-window)
   (org-latex-pdf-process
    '("pdflatex -shelnl-escape -interaction nonstopmode -output-directory %o %f"
@@ -66,8 +66,8 @@
   (add-to-list 'org-latex-packages-alist '("" "listings"))
   (unless (version< org-version "9.2")
     (require 'org-tempo))
-  (when (file-directory-p "~/org/agenda/")
-    (setq org-agenda-files (list "~/org/agenda/")))
+  (when (file-directory-p "~/github/furry-octo-spoon/agenda")
+    (setq org-agenda-files (list "~/github/furry-octo-spoon/agenda")))
 
   (defun org-export-toggle-syntax-highlight ()
     "Setup variables to turn on syntax highlighting when calling `org-latex-export-to-pdf'."
@@ -105,6 +105,37 @@
    '(;; other Babel languages
      (plantuml . t))))
 ;; -PlantUMLPac
+
+;; see also ;; https://stackoverflow.com/a/39872147/8584652
+;; ;; OrgBabel
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+    '(
+      (shell . t)
+      (R . t)
+      (makefile . t)
+      (python . t)
+      (latex . t)
+      (awk . t)
+      (gnuplot . t)
+    )
+    )
+(setq org-confirm-babel-evaluation nil)
+
+;; Loading templates
+
+(require 'org-tempo)
+(add-to-list 'org-structure-template-alist '("awk" . "src awk"))
+(add-to-list 'org-structure-template-alist '("make" . "src makefile"))
+(add-to-list 'org-structure-template-alist '("R" . "src R"))
+
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("la" . "src latex"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+
+
+
+;; -OrgBabel
 
 (provide 'init-org)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
