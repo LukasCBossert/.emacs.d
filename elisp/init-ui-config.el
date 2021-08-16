@@ -102,7 +102,8 @@
   (enlarge-window ( - 10 (window-body-height)))
   (split-window-vertically)
   ;; (ibuffer-jump)
-  (find-file "~/github/furry-octo-spoon/agenda/lukascbossert.org")
+  ;; (find-file "~/github/furry-octo-spoon/agenda/lukascbossert.org")
+ ;; (mu4e-overview)
 
   (previous-multiframe-window)
   )

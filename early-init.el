@@ -83,6 +83,8 @@
 
 ;; fullscreen when start
 (add-hook 'window-setup-hook 'toggle-frame-fullscreen t)
+(add-hook 'tab-bar-setup-hook 'tab-bar-mode t)
+
 
 
 (provide 'early-init)

@@ -37,6 +37,7 @@
 
 ;; OrgPac
 (use-package org
+  :load-path  "/Users/lukascbossert/github/org-mode/lisp/"
   :ensure nil
   :defer t
   :bind (("C-c l" . org-store-link)
@@ -79,6 +80,31 @@
     "Insert a #+attr_latex to the current buffer, default the align to |c|c|c|, adjust if necessary."
     (interactive)
     (insert "#+attr_latex: :align |c|c|c|")))
+
+;; https://emacs.stackexchange.com/a/20618/32054
+(defadvice org-babel-execute-src-block (around load-language nil activate)
+;;  "Load language if needed"
+  (let ((language (org-element-property :language (org-element-at-point))))
+    (unless (cdr (assoc (intern language) org-babel-load-languages))
+      (add-to-list 'org-babel-load-languages (cons (intern language) t))
+      (org-babel-do-load-languages 'org-babel-load-languages org-babel-load-languages))
+    ad-do-it))
+
+;; (org-babel-do-load-languages
+;;  (org-babel-load-languages
+;;   '(
+;;     (shell . t)
+;;     (R . t)
+;;     (makefile . t)
+;;     (python . t)
+;;     (latex . t)
+;;     (awk . t)
+;;     (gnuplot . t)
+;;     (plantuml . t)
+;;     )
+;;   ))
+(setq org-confirm-babel-evaluation nil)
+
 ;; -OrgPac
 
 ;; TocOrgPac
@@ -95,32 +121,17 @@
 ;; -OXGFMPac
 
 ;; PlantUMLPac
-(use-package plantuml-mode
-  :defer t
-  :custom
-  (org-plantuml-jar-path (expand-file-name "~/tools/plantuml/plantuml.jar"))
-  :config
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '(;; other Babel languages
-     (plantuml . t))))
+;; (use-package plantuml-mode
+;;   :defer t
+;;   :custom
+;;   (org-plantuml-jar-path (expand-file-name "~/tools/plantuml/plantuml.jar"))
+;; )
 ;; -PlantUMLPac
 
 ;; see also ;; https://stackoverflow.com/a/39872147/8584652
 ;; ;; OrgBabel
-(org-babel-do-load-languages
- 'org-babel-load-languages
-    '(
-      (shell . t)
-      (R . t)
-      (makefile . t)
-      (python . t)
-      (latex . t)
-      (awk . t)
-      (gnuplot . t)
-    )
-    )
-(setq org-confirm-babel-evaluation nil)
+
+
 
 ;; Loading templates
 
@@ -136,6 +147,24 @@
 
 
 ;; -OrgBabel
+;; ox-pandoc
+(require 'ox-pandoc)
+
+;; default options for all output formats
+(setq org-pandoc-options '((standalone . t)))
+;; special settings for beamer-pdf and latex-pdf exporters
+(setq org-pandoc-options-for-beamer-pdf '((pdf-engine . "lualatex")))
+(setq org-pandoc-options-for-latex-pdf '((pdf-engine . "lualatex")))
+;; special extensions for markdown_github output
+(setq org-pandoc-format-extensions '(markdown_github+pipe_tables+raw_html))
+
+;; (use-package pandoc-mode
+;;   :defer t)
+;; ;; load pandoc-mode automatically with markdown
+;; (add-hook 'markdown-mode-hook 'pandoc-mode)
+;; (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
+
+;; -ox-pandoc
 
 (provide 'init-org)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -89,6 +89,7 @@
                                   (:from . 22)
                                   (:thread-subject . ,(- (window-body-width) 70)) ;; alternatively, use :subject
                                   (:size . 7))))))
+
   :config
   (require 'mu4e-icalendar)
   (mu4e-icalendar-setup)
@@ -99,23 +100,58 @@
   (add-to-list 'mu4e-view-actions
                '("ViewInBrowser" . mu4e-action-view-in-browser) t)
   (setq   mu4e-maildir-shortcuts
-        '(("/lukascbossert/INBOX" . ?i)
-          ("/lukascbossert/Sent Items" . ?s)
-          ("/lukascbossert/Spam" . ?S)
-          ("/lukascbossert/Trash" . ?t)
-          ("/lukascbossert/Archive" . ?a)
-          ("/lukascbossert/Drafts" . ?d)
-          ("/lukascbossert/Archive" . ?a)
-          ))
+          '(("/lukascbossert/INBOX" . ?i)
+            ("/lukascbossert/Sent Items" . ?s)
+            ("/lukascbossert/Spam" . ?S)
+            ("/lukascbossert/Trash" . ?t)
+            ("/lukascbossert/Archive" . ?a)
+            ("/lukascbossert/Drafts" . ?d)
+            ("/lukascbossert/Archive" . ?a)
+            ))
   )
+
+;; (with-eval-after-load 'mu4e
+;;   (add-to-list 'mu4e-bookmarks
+;;              (make-mu4e-bookmark
+;;               :name "Inbox - lukascbossert"
+;;               :query "maildir:/lukascbossert/INBOX"
+;;               :key ?e)))
+;; (add-to-list 'mu4e-bookmarks
+;;   '( :name  "INBOX lukascbossert"
+;;      :query "maildir:/lukascbossert/INBOX"
+;;      :key   ?l))
+
+
+;; Signature
+(defun my-mu4e-choose-signature ()
+  "Insert one of a number of sigs"
+  (interactive)
+  (let ((message-signature
+         (mu4e-read-option "Signature:"
+                           '(("private" .
+                              (concat
+                               "Dr. Lukas C. Bossert\n"
+                               "Archäoinformatiker\n"
+                               "W: http://www.lukascbossert.de\n")
+                              )
+                             ("texografie" .
+                              (concat
+                               "Dr. Lukas C. Bossert\n"
+                               "    -- texografie --\n"
+                               "    automate & optimize\n"
+                               "W: http://www.texografie.de\n")
+                              ))
+                           )
+         )
+        )
+    (message-insert-signature)))
+
+(add-hook 'mu4e-compose-mode-hook
+          (lambda () (local-set-key (kbd "C-c C-w") #'my-mu4e-choose-signature)))
+
 ;; -Mu4ePac
 
-(with-eval-after-load 'mu4e
-  (add-to-list 'mu4e-bookmarks
-             (mu4e-bookmark
-              :name "Inbox - lukascbossert"
-              :query "maildir:/lukascbossert/INBOX"
-              :key ?e)))
+
 
 ;; gpg encryptiom & decryption:
 ;; this can be left alone
@@ -152,13 +188,28 @@
                      (message-fetch-field "from")))
              (account
               (cond
-            ;;  ((string-match "dummy@icloud.com" from) "icloud")
-            ;;   ((string-match "dummy@gmail.com" from) "gmail")
+               ;;  ((string-match "dummy@icloud.com" from) "icloud")
+               ;;   ((string-match "dummy@gmail.com" from) "gmail")
                ((string-match "mail@lukascbossert.de" from) "lukascbossert")
                )))
           (setq message-sendmail-extra-arguments (list '"-a" account))))))
 
 (add-hook 'message-send-mail-hook 'timu/set-msmtp-account)
+
+;; enable inline images
+(setq mu4e-view-show-images t)
+;; use imagemagick, if available
+(when (fboundp 'imagemagick-register-types)
+  (imagemagick-register-types))
+
+
+;; Saving outgoing messages
+;; tell message-mode how to send mail
+(setq message-send-mail-function 'smtpmail-send-it)
+;; if our mail server lives at smtp.example.org; if you have a local
+;; mail-server, simply use 'localhost' here.
+(setq smtpmail-smtp-server "smtp.strato.de")
+
 
 ;; mu4e cc & bcc
 ;; this is custom as well
@@ -178,7 +229,7 @@
 ;; don't have to confirm when quitting:
 (setq mu4e-confirm-quit nil)
 ;; number of visible headers in horizontal split view:
-(setq mu4e-headers-visible-lines 20)
+(setq mu4e-headers-visible-lines 30)
 ;; don't show threading by default:
 (setq mu4e-headers-show-threads nil)
 ;; hide annoying "mu4e Retrieving mail..." msg in mini buffer:
@@ -191,6 +242,8 @@
 (setq mu4e-headers-include-related nil)
 ;; by default do not show threads:
 (setq mu4e-headers-show-threads nil)
+
+
 
 (provide 'init-mu4e)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

@@ -47,6 +47,12 @@
     "A wrapper around `magit-log-buffer-file' with `--follow' argument."
     (interactive)
     (magit-log-buffer-file t)))
+
+;; After load magit
+
+(use-package magit-lfs
+     :ensure t
+     :pin melpa)
 ;; -MagitPac
 
 (provide 'init-magit)

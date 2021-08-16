@@ -205,6 +205,8 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'init-pdf)
 
+(require 'init-ref)
+
 ;; Internet
 (require 'init-eaf)
 
@@ -235,6 +237,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 
 (require 'init-reveal)
 (require 'init-icons)
+;;(require 'init-emms)
 
 ;; InitPrivate
 ;; Load init-private.el if it exists
@@ -242,7 +245,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (load-file (expand-file-name "init-private.el" user-emacs-directory)))
 ;; -InitPrivate
 
-
+(global-set-key (kbd "C-x b") 'counsel-switch-buffer)
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
