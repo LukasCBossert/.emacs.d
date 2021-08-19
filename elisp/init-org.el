@@ -58,9 +58,9 @@
   (org-todo-keywords
    '((sequence "TODO" "IN-PROGRESS" "REVIEW" "VOID" "|" "DONE" "CANCELED")))
   (org-agenda-window-setup 'other-window)
-  (org-latex-pdf-process
-   '("pdflatex -shelnl-escape -interaction nonstopmode -output-directory %o %f"
-     "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+  ;; (org-latex-pdf-process
+  ;;  '("latexmk -lualatex -shell-escape -output-directory %o %f"
+  ;;    "latexmk -lualatex -shell-escape -output-directory %o %f"))
   :custom-face
   (org-agenda-current-time ((t (:foreground "spring green"))))
   :config
@@ -103,7 +103,6 @@
 ;;     (plantuml . t)
 ;;     )
 ;;   ))
-(setq org-confirm-babel-evaluation nil)
 
 ;; -OrgPac
 
@@ -147,6 +146,58 @@
 
 
 ;; -OrgBabel
+
+
+(unless (boundp 'org-latex-classes)
+  (setq org-latex-classes nil))
+
+
+(add-to-list 'org-latex-classes
+             '("LTX"
+               "\\documentclass[11pt,a4paper]{scrartcl}
+\\usepackage{graphicx}
+\\usepackage{fontspec}
+\\setmainfont{Libertinus Serif}
+\\setsansfont{Libertinus Sans}
+\\setmonofont{TeX Gyre Cursor}
+\\usepackage{longtable}
+\\usepackage{wrapfig}
+\\usepackage{rotating}
+\\usepackage{xcolor}
+\\usepackage{enumitem}
+\\definecolor{bg}{rgb}{0.95,0.95,0.95}
+\\tolerance=1000
+      [NO-DEFAULT-PACKAGES]
+      [PACKAGES]
+      [EXTRA]
+\\usepackage{hyperref}
+\\hypersetup{pdfborder=0 0 0}"
+               ("\\section{%s}" . "\\section*{%s}")
+               ("\\subsection{%s}" . "\\subsection*{%s}")
+               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+               ("\\paragraph{%s}" . "\\paragraph*{%s}")))
+
+(setq   org-latex-pdf-process
+   '("lualatex -interaction nonstopmode -output-directory %o %f"
+    "lualatex -interaction nonstopmode -output-directory %o %f"))
+
+;; https://stackoverflow.com/a/41625195/8584652
+;; lualatex preview
+(setq luamagick '(luamagick :programs ("lualatex" "convert")
+       :description "pdf > png"
+       :message "you need to install lualatex and imagemagick."
+       :use-xcolor t
+       :image-input-type "pdf"
+       :image-output-type "png"
+       :image-size-adjust (1.0 . 1.0)
+       :latex-compiler ("lualatex -interaction nonstopmode -output-directory %o %f")
+       :image-converter ("convert -density %D -trim -antialias %f -quality 100 %O")))
+
+(add-to-list 'org-preview-latex-process-alist luamagick)
+
+(setq org-preview-latex-default-process 'luamagick)
+
+
 ;; ox-pandoc
 (require 'ox-pandoc)
 
@@ -165,6 +216,7 @@
 ;; (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings)
 
 ;; -ox-pandoc
+
 
 (provide 'init-org)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

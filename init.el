@@ -183,13 +183,13 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-company)
 
 ;; Programming
-(require 'init-java)
+;;(require 'init-java)
 
-(require 'init-cc)
+;;(require 'init-cc)
 
 (require 'init-python)
 
-(require 'init-haskell)
+;; (require 'init-haskell)
 
 (require 'init-ess)
 
@@ -225,7 +225,7 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
 (require 'init-eww)
 
 ;; Miscellaneous
-(require 'init-chinese)
+;; (require 'init-chinese)
 
 (require 'init-games)
 
