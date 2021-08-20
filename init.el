@@ -245,7 +245,11 @@ If you experience freezing, decrease this.  If you experience stuttering, increa
   (load-file (expand-file-name "init-private.el" user-emacs-directory)))
 ;; -InitPrivate
 
-(global-set-key (kbd "C-x b") 'counsel-switch-buffer)
+;; (global-set-key (kbd "C-x C-b") 'counsel-switch-buffer)
+(global-set-key (kbd "C-x C-b") 'helm-buffers-list)
+(global-set-key (kbd "C-x b") 'helm-buffers-list)
+
+
 
 (provide 'init)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
